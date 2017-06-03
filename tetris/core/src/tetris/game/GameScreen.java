@@ -13,6 +13,16 @@ public class GameScreen extends ScreenAdapter {
     private static final float FIELD_POSITION_X = 15;
     private static final float FIELD_POSITION_Y = 15;
 
+    private static String STATE = "PLAY";
+
+    public static String getSTATE() {
+        return STATE;
+    }
+
+    public static void setSTATE(String STATE) {
+        GameScreen.STATE = STATE;
+    }
+
     @Override
     public void show(){
         Config.FIELD_POSITION_X = FIELD_POSITION_X;
@@ -24,7 +34,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         clearScreen();
-        Logic.update(delta);
+        if (STATE.equals("PLAY"))
+            Logic.update(delta);
         Logic.draw();
     }
 

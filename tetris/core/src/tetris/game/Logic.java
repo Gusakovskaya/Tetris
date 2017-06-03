@@ -22,7 +22,6 @@ public class Logic {
     private static Figure currentFigure = Figure.createFigure(FIELD_POSITION_X, FIELD_POSITION_Y);
     private static Figure nextFigure = createNewFigure(FIELD_POSITION_X, FIELD_POSITION_Y);
 
-
     public static Field getField() {
         return field;
     }
@@ -85,7 +84,10 @@ public class Logic {
 
     public static void stepDown(Field field, Figure figure){
         if (isTouchGround(field, figure))
-            updateFieldAndFigure(field, figure);
+            if (isGameOver(figure))
+                GameScreen.setSTATE("GAMEOVER");
+            else
+                updateFieldAndFigure(field, figure);
         else
             figure.stepDown();
     }
@@ -94,6 +96,24 @@ public class Logic {
         field.draw();
         currentFigure.draw();
         smallField.drawField();
+    }
+
+    public static boolean isGameOver(Figure figure){
+        boolean flagNeg = false;
+        boolean flagPos = false;
+        for (Block block: figure.getList_of_Bloks()) {
+            if (block.getY() < 0)
+                return true;
+                //flagNeg = true;
+            //if (block.getY () >= 0)
+            //    if (flagNeg && (field.getMatrix()[block.getY() + 1][block.getX()] != 0))
+            //        return true;
+            //    else
+            //        flagPos = true;
+        }
+        //if (flagNeg)
+        //    return true;
+        return false;
     }
 
     public static void checkFilling(Field field) {
@@ -138,7 +158,7 @@ public class Logic {
 
     public static boolean isTouchGround(Field field, Figure figure) {
         for (Block block : figure.getList_of_Bloks())
-            if (block.getY() > 0 && (field.getMatrix()[block.getY() + 1][block.getX()] != 0))
+            if (block.getY() >= -1 && (field.getMatrix()[block.getY() + 1][block.getX()] != 0))
                 return true;
         return false;
     }
@@ -146,7 +166,7 @@ public class Logic {
     public static boolean isWrongPosition(Field field, Figure figure) {
         for (int y = 0; y < figure.getSIZE(); y++)
             for (int x = 0; x < figure.getSIZE(); x++)
-                if (figure.getShape()[y][x] == 1) {
+                if (figure.getShape()[y][x] > 1) {
                     if (y + figure.y < 0)
                         return true;
                     if (x + figure.x < 0 || x + figure.x > field.getWIDTH() - 1)
