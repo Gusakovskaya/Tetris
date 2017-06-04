@@ -9,9 +9,9 @@ import java.util.Comparator;
  */
 public class Player implements Comparable<Player> {
 
-    private String nickName;
-    protected int points;
-    private int lines;
+    public String nickName;
+    public int points;
+    public int lines;
 
     public Player(String name, int point, int line){
         nickName = name;

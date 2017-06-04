@@ -164,7 +164,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void createResultButton() {
         resultButton = new TextButton("Records", button_skin);
-        resultButton.setPosition(0, 170);
+        resultButton.setPosition(300, 250);
         resultButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -172,6 +172,4 @@ public class GameScreen extends ScreenAdapter {
             }
         });
     }
-
-
 }
