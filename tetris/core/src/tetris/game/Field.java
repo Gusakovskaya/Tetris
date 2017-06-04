@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import java.awt.event.HierarchyBoundsAdapter;
 import java.util.Arrays;
 
 /**
@@ -122,6 +123,12 @@ public class Field {
         batch.end();
     }
 
+    public void clear(){
+        for (int i = 0; i < HEIGHT; i++)
+            for (int j = 0; j < WIDTH; j++)
+                matrix[i][j] = 0;
+    }
+
     public void chooseBlockTexture(int value){
         switch (value){
             case Colors.BLUE:{
@@ -152,6 +159,24 @@ public class Field {
                 blockTexture = yellowBlockTexture;
                 return;
             }
+        }
+    }
+
+    public void moveRight(){
+        int buffer;
+        for (int i = 0; i < HEIGHT; i++) {
+            buffer = matrix[i][0];
+            System.arraycopy(matrix[i],1, matrix[i], 0, WIDTH -1);
+            matrix[i][WIDTH - 1] = buffer;
+        }
+    }
+
+    public void moveLeft(){
+        int buffer;
+        for (int i = 0; i < HEIGHT; i++) {
+            buffer = matrix[i][WIDTH - 1];
+            System.arraycopy(matrix[i],0, matrix[i], 1, WIDTH -1);
+            matrix[i][0] = buffer;
         }
     }
 

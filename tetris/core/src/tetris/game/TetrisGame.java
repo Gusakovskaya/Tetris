@@ -8,7 +8,6 @@ public class TetrisGame extends Game {
 
 	@Override
 	public void create () {
-		//gameScreen = new GameScreen(/*this*/)
 		setScreen(new GameScreen());
 	}
 

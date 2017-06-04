@@ -55,7 +55,7 @@ public class Figure {
 
 
     public static Figure createFigure(float posX, float posY){
-        int type = MathUtils.random(6) + 1;
+        int type = (MathUtils.random(10000) % 7) + 1;
         switch (type){
             case Colors.BLUE:{
                 return new FigureL(posX, posY);

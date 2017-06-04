@@ -1,5 +1,6 @@
 package tetris.game;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
 
 /**
  * Created by zhenya on 5/30/17.
@@ -17,10 +18,15 @@ public class Logic {
     private static float MOVE_TIME = START_MOVE_TIME;
     private static float timer = START_MOVE_TIME;
 
+    public static int points = 0;
+    public static int lines = 0;
+    private static boolean hardMode = true;
+
     private static Field field = new Field(FIELD_POSITION_X, FIELD_POSITION_Y, Config.FIELD_WIDTH, Config.FIELD_HEIGHT);
     private static Field smallField = new Field(SMALL_FIELD_POSITION_X, SMALL_FIELD_POSITION_Y, 4, 4);
     private static Figure currentFigure = Figure.createFigure(FIELD_POSITION_X, FIELD_POSITION_Y);
     private static Figure nextFigure = createNewFigure(FIELD_POSITION_X, FIELD_POSITION_Y);
+
 
     public static Field getField() {
         return field;
@@ -38,6 +44,7 @@ public class Logic {
         MOVE_TIME = moveTime;
     }
 
+
     public static void drop(Field field, Figure figure) {
         for (int i = 0; i < figure.getSIZE(); i++)
             System.arraycopy(figure.getShape()[i], 0, field.getMatrix()[i], 0, figure.getShape()[i].length);
@@ -48,6 +55,7 @@ public class Logic {
         drop(smallField, figure);
         return figure;
     }
+
 
     public static void rotateFigure(Field field, Figure figure) {
         currentFigure.rotateLeft();
@@ -92,39 +100,66 @@ public class Logic {
             figure.stepDown();
     }
 
+    public static void startNewGame(){
+        field.clear();
+        changeCurrentFigure();
+    }
+
+
     public static void draw() {
         field.draw();
         currentFigure.draw();
         smallField.drawField();
     }
 
-    public static boolean isGameOver(Figure figure){
-        boolean flagNeg = false;
-        boolean flagPos = false;
-        for (Block block: figure.getList_of_Bloks()) {
-            if (block.getY() < 0)
-                return true;
-                //flagNeg = true;
-            //if (block.getY () >= 0)
-            //    if (flagNeg && (field.getMatrix()[block.getY() + 1][block.getX()] != 0))
-            //        return true;
-            //    else
-            //        flagPos = true;
-        }
-        //if (flagNeg)
-        //    return true;
-        return false;
-    }
 
     public static void checkFilling(Field field) {
+        int count = deleteFilledLines(field);
+        if (count != 0) {
+            MOVE_TIME -= MOVE_DELTA;
+            if (MOVE_TIME < MIN_MOVE_TIME)
+                MOVE_TIME = MIN_MOVE_TIME;
+            points += Config.POINTS_FOR_LINE * factor(count);
+            lines += count;
+            if (lines % 10 == 0)
+                Config.POINTS_FOR_LINE += 20;
+            if (hardMode)
+                moveField(count, field);
+        }
+    }
+
+    public static void moveField(int count, Field field){
+        int direction = MathUtils.random(10000) % 2; // 0 - right, 1 - left
+        int steps_count = factor(count);
+        for (int i = 0; i < steps_count; i++){
+            if (direction == 0)
+                field.moveRight();
+            else
+                field.moveLeft();
+        }
+    }
+
+    public static int factor(int count){
+        if (count == 1)
+            return 1;
+        if (count == 2)
+            return 3;
+        if (count == 3)
+            return 5;
+        if (count >= 4)
+            return 8;
+        return 0;
+    }
+
+    public static int deleteFilledLines(Field field){
         int row = field.getHEIGHT() - 1;
-        boolean wasFilled = false;
+        int count = 0;
         while (row > 0) {
             int filled = 1;
             for (int col = 0; col < field.getWIDTH(); col++)
                 filled *= Integer.signum(field.getMatrix()[row][col]);
             if (filled > 0) {
-                wasFilled = true;
+                count += 1;
                 for (int i = row; i > 0; i--)
                     System.arraycopy(field.getMatrix()[i - 1], 0,
                             field.getMatrix()[i], 0,
@@ -133,16 +168,14 @@ public class Logic {
             else
                 row--;
         }
-        if (wasFilled) {
-            MOVE_TIME -= MOVE_DELTA;
-            if (MOVE_TIME < MIN_MOVE_TIME)
-                MOVE_TIME = MIN_MOVE_TIME;
-        }
+        return count;
     }
+
 
     public static void leaveOnTheGround(Field field, Figure figure) {
         for (Block block : figure.getList_of_Bloks())
             field.getMatrix()[block.getY()][block.getX()] = figure.getColor();
+        points += Config.POINTS_FOR_FIGURE;
     }
 
     public static void changeCurrentFigure(){
@@ -155,6 +188,13 @@ public class Logic {
         changeCurrentFigure();
     }
 
+
+    public static boolean isGameOver(Figure figure){
+        for (Block block: figure.getList_of_Bloks())
+            if (block.getY() < 0)
+                return true;
+        return false;
+    }
 
     public static boolean isTouchGround(Field field, Figure figure) {
         for (Block block : figure.getList_of_Bloks())

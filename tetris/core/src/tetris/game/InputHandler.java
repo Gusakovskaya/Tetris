@@ -11,9 +11,9 @@ public class InputHandler implements InputProcessor {
     private float pastMoveTime;
 
     public boolean keyDown (int keycode){
-        if ((keycode == Input.Keys.LEFT || keycode == Input.Keys.RIGHT) && !GameScreen.getSTATE().equals("PAUSE"))
+        if ((keycode == Input.Keys.LEFT || keycode == Input.Keys.RIGHT) && GameScreen.getSTATE().equals("PLAY"))
             Logic.move(keycode);
-        if (keycode == Input.Keys.UP && !GameScreen.getSTATE().equals("PAUSE"))
+        if (keycode == Input.Keys.UP && GameScreen.getSTATE().equals("PLAY"))
             Logic.rotateFigure(Logic.getField(),Logic.getCurrentFigure());
         if (keycode == Input.Keys.DOWN){
             pastMoveTime = Logic.getMoveTime();
