@@ -2,6 +2,8 @@ package tetris.game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 
+import javax.swing.*;
+
 /**
  * Created by zhenya on 5/30/17.
  */
@@ -93,7 +95,7 @@ public class Logic {
     public static void stepDown(Field field, Figure figure){
         if (isTouchGround(field, figure))
             if (isGameOver(figure))
-                GameScreen.setSTATE("GAMEOVER");
+                gameOver();
             else
                 updateFieldAndFigure(field, figure);
         else
@@ -102,9 +104,18 @@ public class Logic {
 
     public static void startNewGame(){
         field.clear();
+        points = 0;
+        lines = 0;
         changeCurrentFigure();
     }
 
+    public static void gameOver(){
+        GameScreen.setSTATE("GAMEOVER");
+
+        String name = JOptionPane.showInputDialog("Your points:" + points +"\nEnter your name");
+        if (name != null)
+            NetworkManager.addPlayer(new Player(name, points, lines));
+    }
 
     public static void draw() {
         field.draw();

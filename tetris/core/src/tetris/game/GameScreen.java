@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import javax.swing.*;
+
 /**
  * Created by zhenya on 5/28/17.
  */
@@ -33,7 +35,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private Stage stage = new Stage();
-    private TextButton startButton, pauseButton, exitButton;
+    private TextButton startButton, pauseButton, exitButton, resultButton;
     private Label nextLabel;
     private Label pointLabel;
     private Label linesLebel;
@@ -48,6 +50,7 @@ public class GameScreen extends ScreenAdapter {
         createStartButton();
         createPauseButton();
         createExitButton();
+        createResultButton();
         createLabels();
         Config.FIELD_POSITION_X = FIELD_POSITION_X;
         Config.FIELD_POSITION_Y = FIELD_POSITION_Y;
@@ -64,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
         stage.addActor(nextLabel);
         stage.addActor(pointLabel);
         stage.addActor(linesLebel);
+        stage.addActor(resultButton);
     }
 
     @Override
@@ -157,5 +161,17 @@ public class GameScreen extends ScreenAdapter {
         linesLebel =  new Label(String.format("Lines: %1$d", Logic.lines), label_skin);
         linesLebel.setPosition(300, 320);
     }
+
+    private void createResultButton() {
+        resultButton = new TextButton("Records", button_skin);
+        resultButton.setPosition(0, 170);
+        resultButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                JOptionPane.showMessageDialog(null, NetworkManager.getRecords(), "Records", JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+    }
+
 
 }
