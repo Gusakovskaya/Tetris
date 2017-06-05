@@ -22,7 +22,7 @@ public class Logic {
 
     public static int points = 0;
     public static int lines = 0;
-    private static boolean hardMode = true;
+    public static boolean hardMode = false;
 
     private static Field field = new Field(FIELD_POSITION_X, FIELD_POSITION_Y, Config.FIELD_WIDTH, Config.FIELD_HEIGHT);
     private static Field smallField = new Field(SMALL_FIELD_POSITION_X, SMALL_FIELD_POSITION_Y, 4, 4);

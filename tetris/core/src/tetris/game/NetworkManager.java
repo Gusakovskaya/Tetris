@@ -2,18 +2,13 @@ package tetris.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.dropbox.core.*;
 import com.dropbox.core.v1.DbxClientV1;
 import com.dropbox.core.v1.DbxEntry;
 import com.dropbox.core.v1.DbxWriteMode;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.*;
 import java.util.*;
-import java.util.logging.FileHandler;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
